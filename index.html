@@ -19,210 +19,200 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Outfit',system-ui,sans-serif;min-height:100vh;overflow-x:hidden;background:var(--bg);color:var(--text)}
-#tela-calc{min-height:100vh;padding:2rem 1rem}
-.calc-page{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:1rem}
+.page{max-width:1140px;margin:0 auto;padding:2rem 1rem;display:flex;flex-direction:column;gap:1rem}
+.hidden{display:none!important}
 
 /* Barra da marca */
-.brand-bar{background:var(--mid);border-radius:var(--r);padding:.875rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.brand-bar{background:var(--mid);border-radius:var(--r);padding:.875rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
 .brand-left{color:#fff;font-weight:700;font-size:16px;letter-spacing:-0.02em}
+.brand-left span{font-weight:400;color:rgba(255,255,255,.55);margin-left:8px;font-size:14px}
+.brand-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
 .period-wrap{display:flex;align-items:center;gap:8px}
 .period-label{color:rgba(255,255,255,.6);font-size:13px}
 .period-input{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:7px;color:#fff;font-family:inherit;font-size:13px;font-weight:500;padding:6px 10px;outline:none;width:120px;text-align:center}
 .period-input::placeholder{color:rgba(255,255,255,.4)}
-.brand-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-.btn-edit{font-family:inherit;font-size:13px;font-weight:600;color:var(--mid);background:#fff;border:none;border-radius:7px;padding:7px 12px;cursor:pointer}
-.btn-edit:hover{background:var(--ok-bg)}
-.hidden{display:none!important}
-.form-actions{display:flex;justify-content:flex-end;margin-top:1.1rem}
-.btn-primary{font-family:inherit;font-size:15px;font-weight:600;color:#fff;background:var(--mid);border:none;border-radius:var(--rs);padding:12px 22px;cursor:pointer;transition:background .15s}
-.btn-primary:hover{background:var(--dark)}
-.btn-primary:focus-visible,.btn-edit:focus-visible{outline:2px solid var(--green);outline-offset:2px}
-.warns-result{margin-bottom:1rem}
+.btn-toggle{font-family:inherit;font-size:13px;font-weight:600;color:var(--mid);background:#fff;border:none;border-radius:7px;padding:7px 12px;cursor:pointer}
+.btn-toggle:hover{background:var(--ok-bg)}
+.btn-toggle:focus-visible,.period-input:focus-visible{outline:2px solid var(--light);outline-offset:2px}
 
-/* Seções */
+/* Layout: lateral + resultado */
+.layout{display:grid;grid-template-columns:272px minmax(0,1fr);gap:1rem;align-items:start}
+.present .layout{grid-template-columns:minmax(0,1fr)}
+.present .side{display:none}
+.main{display:flex;flex-direction:column;gap:1rem;min-width:0}
+
 .section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem}
-.s-head{display:flex;align-items:center;gap:10px;margin-bottom:1rem}
-.s-num{width:26px;height:26px;border-radius:50%;background:var(--mid);color:#fff;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.s-head{display:flex;align-items:baseline;gap:10px;margin-bottom:1rem}
 .s-title{font-size:16px;font-weight:600;color:var(--text)}
 .s-sub{font-size:13px;color:var(--text3);margin-left:auto}
 
-/* 1. Dados */
-.group-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin:0 0 .5rem 2px}
-.group-label.gap{margin-top:1rem}
-.igrid{display:grid;gap:8px}
-.igrid-6{grid-template-columns:repeat(6,1fr)}
-.igrid-3{grid-template-columns:repeat(3,1fr)}
-.igrid-4{grid-template-columns:repeat(4,1fr)}
-.icard{background:#F7F8F7;border:1px solid var(--border);border-radius:var(--rs);padding:.65rem .85rem;transition:border-color .15s,background .15s}
-.icard:focus-within{border-color:var(--green);background:#fff}
-.icard.err{border-color:var(--warn-bd);background:#FFFBF4}
-.icard label{font-size:11px;color:var(--text3);display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.icard input{width:100%;font-family:inherit;font-size:18px;font-weight:500;border:none;outline:none;color:var(--text);background:transparent;padding:0}
-.hint{font-size:11px;color:var(--text3);margin-top:2px}
-.warns{margin-top:.9rem;background:var(--warn-bg);border:1px dashed var(--warn-bd);border-radius:var(--rs);padding:.6rem .9rem;font-size:13px;color:var(--warn-fg);line-height:1.6}
+/* Lateral de dados */
+.side{position:sticky;top:1rem;padding:1rem 1.1rem}
+.side .s-head{margin-bottom:.75rem}
+.side .s-title{font-size:14px}
+.group-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin:0 0 .45rem;padding-bottom:4px;border-bottom:1px dashed var(--border)}
+.group-label.gap{margin-top:.8rem}
+.field{display:grid;grid-template-columns:1fr 112px;align-items:center;gap:8px;margin-bottom:5px}
+.field label{font-size:12px;color:var(--text2);font-weight:500;line-height:1.2;cursor:pointer}
+.field label small{display:block;font-size:10px;color:var(--text3);font-weight:400}
+.in-wrap{position:relative;display:flex;align-items:center}
+.pfx{position:absolute;left:8px;font-size:10px;color:var(--text3);pointer-events:none}
+.field input{width:100%;font-family:inherit;font-size:13px;font-weight:500;color:var(--text);background:#F7F8F7;border:1px solid var(--border);border-radius:6px;padding:5px 9px 5px 26px;text-align:right;outline:none;transition:border-color .15s,background .15s}
+.field input:focus{border-color:var(--green);background:#fff}
+.field.err input{border-color:var(--warn-bd);background:#FFFBF4}
+.side-note{font-size:11px;color:var(--text3);margin-top:.75rem;line-height:1.45}
 
-/* 2. Funil */
-.headline{border-radius:var(--rs);padding:.85rem 1rem;margin-bottom:1.1rem;display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.warns{margin-bottom:1rem;background:var(--warn-bg);border:1px dashed var(--warn-bd);border-radius:var(--rs);padding:.6rem .9rem;font-size:13px;color:var(--warn-fg);line-height:1.6}
+
+/* Frase-resumo */
+.headline{border-radius:var(--rs);padding:.85rem 1rem;margin-bottom:1.25rem;display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
 .headline.s{background:var(--ok-bg)}.headline.w{background:var(--warn-bg)}.headline.d{background:var(--bad-bg)}
 .h-status{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;padding-top:3px}
 .h-status::before{content:"";width:9px;height:9px;border-radius:50%;background:currentColor}
 .headline.s .h-status{color:var(--ok-fg)}.headline.w .h-status{color:var(--warn-fg)}.headline.d .h-status{color:var(--bad-fg)}
-.h-main{flex:1;min-width:240px;font-size:16px;line-height:1.45;color:var(--text)}
-.h-main b{font-weight:700}
-.h-count{font-size:12px;color:var(--text2);background:rgba(255,255,255,.7);padding:4px 10px;border-radius:20px;white-space:nowrap}
-.h-count b{font-weight:600;color:var(--text)}
+.h-main{flex:1;min-width:220px;font-size:16px;line-height:1.45}
 
-/* Etapa em uma linha: nome | barra | custo */
-.frow{display:grid;grid-template-columns:165px 1fr 165px;align-items:center;gap:14px}
-.fname{font-size:14px;color:var(--text2);font-weight:500}
-.fbar-outer{display:flex;justify-content:center}
-.fbar-inner{height:36px;border-radius:7px;display:flex;align-items:center;justify-content:center;transition:width .5s cubic-bezier(.4,0,.2,1);overflow:hidden}
-.fbar-txt{font-size:14px;font-weight:600;white-space:nowrap;padding:0 12px}
-.fcost{font-size:13px;color:var(--text3);text-align:right;white-space:nowrap}
-.fcost b{font-weight:600;color:var(--text2)}
-.fcost.bad,.fcost.bad b{color:var(--bad-fg)}
-.fcost.ok b{color:var(--ok-fg)}
-
-/* Taxa entre etapas */
-.connector{display:grid;grid-template-columns:165px 1fr 165px;gap:14px;padding:5px 0}
-.conn-mid{display:inline-flex;align-items:center;gap:8px;cursor:default;justify-self:center}
-.bpill{font-size:12px;padding:3px 10px;border-radius:20px;font-weight:600;white-space:nowrap}
-.connector.gargalo .conn-mid{background:var(--bad-bg);border-radius:20px;padding:4px 6px 4px 12px}
-.connector.gargalo.soft .conn-mid{background:var(--warn-bg)}
-.gtag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--bad-fg)}
-.connector.soft .gtag{color:var(--warn-fg)}
-.connector.gargalo .bpill{background:#fff}
-.otimo{background:var(--ok-bg);color:var(--ok-fg)}
-.bom{background:var(--warn-bg);color:var(--warn-fg)}
-.ruim{background:var(--bad-bg);color:var(--bad-fg)}
-.vazio{background:#F1F3F2;color:var(--text3)}
-
-/* Legenda única */
-.legend{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:.9rem;font-size:12px;color:var(--text3)}
+/* Funil SVG */
+/* Funil SVG */
+#funnel{width:100%;max-width:800px;margin:0 auto;min-width:0}
+#funnel svg{display:block;width:100%;height:auto}
+.legend{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:1.75rem;font-size:12px;color:var(--text3)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
 
+/* Indicadores-chave */
 .divider{height:1px;background:var(--border);margin:1.25rem 0}
-.mg{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.mg-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem}
+.mg{display:grid;gap:8px;grid-template-columns:repeat(3,1fr)}
 .mc{background:#F5F6F5;border-radius:var(--rs);padding:12px 14px}
 .mc.hi{background:var(--mid)}
 .mc.ok{background:var(--ok-bg);border-left:3px solid var(--green);border-radius:0 var(--rs) var(--rs) 0}
+.mc.warn{background:var(--warn-bg);border-left:3px solid #E0A33A;border-radius:0 var(--rs) var(--rs) 0}
 .mc.bad{background:var(--bad-bg);border-left:3px solid #E24B4A;border-radius:0 var(--rs) var(--rs) 0}
 .mc-lbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;font-weight:500}
 .mc.hi .mc-lbl{color:var(--light)}
-.mc-val{font-size:17px;font-weight:600;color:var(--text);line-height:1}
-.mc-val small{font-size:13px;font-weight:500;color:var(--text3)}
+.mc-val{font-size:18px;font-weight:600;color:var(--text);line-height:1}
 .mc.hi .mc-val{color:#fff;font-size:21px}
 .mc-sub{font-size:12px;color:var(--text3);margin-top:4px}
 .mc.hi .mc-sub{color:rgba(255,255,255,.6)}
 .mc.ok .mc-sub{color:var(--ok-fg);font-weight:500}
+.mc.warn .mc-sub{color:var(--warn-fg);font-weight:500}
 .mc.bad .mc-sub{color:var(--bad-fg);font-weight:500}
 
-/* 3. Recomendações */
+/* Recomendações */
 .recs{display:flex;flex-direction:column;gap:8px}
 .rec{background:#F7F8F7;border:1px solid var(--border);border-radius:var(--rs);padding:.9rem 1rem;display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:start}
 .rec-n{width:28px;height:28px;border-radius:50%;background:var(--mid);color:#fff;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center}
-.rec-head{font-size:15px;font-weight:600;color:var(--text)}
+.rec-head{font-size:15px;font-weight:600}
 .rec-head span{font-weight:500;color:var(--text3)}
 .rec-act{font-size:13px;color:var(--text2);margin-top:3px;line-height:1.45}
 .rec-imp{text-align:right;white-space:nowrap}
 .rec-imp-main{font-size:15px;font-weight:700;color:var(--ok-fg)}
 .rec-imp-sub{font-size:12px;color:var(--text3);margin-top:2px}
-.rec-note{font-size:12px;color:var(--text3);margin-top:6px}
+.rec-note{font-size:12px;color:var(--text3);margin-top:8px}
 .rec-empty{font-size:14px;color:var(--text2);line-height:1.5}
 
-@media(max-width:860px){.igrid-6{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:880px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .side{position:static}
+  .field{grid-template-columns:1fr 150px}
+}
 @media(max-width:600px){
+  .page{padding:1rem}
   .section{padding:1rem}
-  .igrid-6,.igrid-3,.igrid-4{grid-template-columns:1fr 1fr}
+  .brand-bar{padding:.75rem 1rem}
   .mg{grid-template-columns:1fr 1fr}
   .rec{grid-template-columns:28px 1fr}
   .rec-imp{grid-column:2;text-align:left}
   .s-sub{display:none}
-  .btn-primary{width:100%}
-  .hover-hint{display:none!important}
-  .frow{grid-template-columns:1fr auto;gap:4px 10px}
-  .frow .fbar-outer{grid-column:1/-1;grid-row:2}
-  .connector{grid-template-columns:1fr}
-  .connector>.spacer{display:none}
+}
+@media print{
+  body{background:#fff}
+  .side,.btn-toggle{display:none!important}
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .section,.brand-bar,.mc,.headline{break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 </style>
 </head>
 <body>
-
-<div id="tela-calc">
-  <div class="calc-page">
-    <div class="brand-bar">
-      <div class="brand-left">Potencializa</div>
-      <div class="brand-right">
-        <div class="period-wrap"><span class="period-label">Período</span><input class="period-input" id="periodo" type="text" placeholder="Maio 2026" maxlength="20"></div>
-        <button class="btn-edit hidden" id="btn-edit" type="button">✎ Editar dados</button>
-      </div>
+<div class="page">
+  <div class="brand-bar">
+    <div class="brand-left">Potencializa<span>Diagnóstico de campanha</span></div>
+    <div class="brand-right">
+      <div class="period-wrap"><span class="period-label">Período</span><input class="period-input" id="periodo" type="text" placeholder="Maio 2026" maxlength="20"></div>
+      <button class="btn-toggle" id="btn-toggle" type="button" aria-pressed="false">Modo apresentação</button>
     </div>
+  </div>
 
-    <!-- DADOS (insumo) -->
-    <section class="section" id="sec-dados">
-      <div class="s-head"><div class="s-title">Dados do período</div><div class="s-sub">preencha com os números da campanha</div></div>
-      <div class="group-label">Funil</div>
-      <div class="igrid igrid-6">
-        <div class="icard" data-id="s-imp"><label for="s-imp">Impressões</label><input type="text" inputmode="numeric" id="s-imp" value="48200"></div>
-        <div class="icard" data-id="s-cli"><label for="s-cli">Cliques</label><input type="text" inputmode="numeric" id="s-cli" value="4960"></div>
-        <div class="icard" data-id="s-vis"><label for="s-vis">Visitas</label><input type="text" inputmode="numeric" id="s-vis" value="4150"></div>
-        <div class="icard" data-id="s-lea"><label for="s-lea">Leads / MQL</label><input type="text" inputmode="numeric" id="s-lea" value="101"></div>
-        <div class="icard" data-id="s-ops"><label for="s-ops">Oport. / SQL</label><input type="text" inputmode="numeric" id="s-ops" value="58"></div>
-        <div class="icard" data-id="s-ven"><label for="s-ven">Vendas</label><input type="text" inputmode="numeric" id="s-ven" value="13"></div>
-      </div>
-      <div class="group-label gap">Financeiro</div>
-      <div class="igrid igrid-4">
-        <div class="icard"><label for="s-verba">Valor investido (R$)</label><input type="text" inputmode="numeric" id="s-verba" value="4940"></div>
-        <div class="icard"><label for="s-fat">Faturamento total (R$)</label><input type="text" inputmode="numeric" id="s-fat" value="39000"></div>
-        <div class="icard"><label for="s-cplt">CPL teto (R$)</label><input type="text" inputmode="numeric" id="s-cplt" value="50"><div class="hint">máximo por lead</div></div>
-        <div class="icard"><label for="s-cact">CAC teto (R$)</label><input type="text" inputmode="numeric" id="s-cact" value="500"><div class="hint">máximo por venda</div></div>
-      </div>
-      <div id="warns"></div>
-      <div class="form-actions"><button class="btn-primary" id="btn-gerar" type="button">Gerar diagnóstico →</button></div>
-    </section>
+  <div class="layout">
+    <!-- LATERAL: DADOS -->
+    <aside class="section side" aria-label="Dados do período">
+      <div class="s-head"><div class="s-title">Dados do período</div></div>
+      <div class="group-label">Investimento</div>
+      <div class="field" data-id="s-verba"><label for="s-verba">Valor investido</label><div class="in-wrap"><span class="pfx">R$</span><input type="text" inputmode="numeric" id="s-verba" value="4940"></div></div>
+      <div class="group-label gap">Marketing</div>
+      <div class="field" data-id="s-imp"><label for="s-imp">Impressões</label><div class="in-wrap"><span class="pfx">#</span><input type="text" inputmode="numeric" id="s-imp" value="48200"></div></div>
+      <div class="field" data-id="s-cli"><label for="s-cli">Cliques</label><div class="in-wrap"><span class="pfx">#</span><input type="text" inputmode="numeric" id="s-cli" value="4960"></div></div>
+      <div class="field" data-id="s-vis"><label for="s-vis">Visitas</label><div class="in-wrap"><span class="pfx">#</span><input type="text" inputmode="numeric" id="s-vis" value="4150"></div></div>
+      <div class="field" data-id="s-lea"><label for="s-lea">Leads / MQL</label><div class="in-wrap"><span class="pfx">#</span><input type="text" inputmode="numeric" id="s-lea" value="101"></div></div>
+      <div class="group-label gap">Comercial</div>
+      <div class="field" data-id="s-ops"><label for="s-ops">Oportunidades</label><div class="in-wrap"><span class="pfx">#</span><input type="text" inputmode="numeric" id="s-ops" value="58"></div></div>
+      <div class="field" data-id="s-ven"><label for="s-ven">Vendas</label><div class="in-wrap"><span class="pfx">#</span><input type="text" inputmode="numeric" id="s-ven" value="13"></div></div>
+      <div class="group-label gap">Métricas de negócio</div>
+      <div class="field" data-id="s-fat"><label for="s-fat">Faturamento total</label><div class="in-wrap"><span class="pfx">R$</span><input type="text" inputmode="numeric" id="s-fat" value="39000"></div></div>
+      <div class="field" data-id="s-cplt"><label for="s-cplt">CPL teto<small>máximo por lead</small></label><div class="in-wrap"><span class="pfx">R$</span><input type="text" inputmode="numeric" id="s-cplt" value="50"></div></div>
+      <div class="field" data-id="s-cact"><label for="s-cact">CAC teto<small>máximo por venda</small></label><div class="in-wrap"><span class="pfx">R$</span><input type="text" inputmode="numeric" id="s-cact" value="500"></div></div>
+      <p class="side-note">O diagnóstico atualiza enquanto você digita. Use <b>Modo apresentação</b> para mostrar só o resultado.</p>
+    </aside>
 
-    <!-- FUNIL -->
-    <section class="section hidden" id="sec-funil">
-      <div class="s-head"><div class="s-title">Funil da campanha</div><div class="s-sub" id="funil-sub">do lead frio ao lead quente</div></div>
-      <div id="warns-result"></div>
-      <div id="headline"></div>
-      <div id="funnel"></div>
-      <div class="divider"></div>
-      <div class="group-label">Resultado financeiro</div>
-      <div class="mg">
-        <div class="mc hi"><div class="mc-lbl">Faturamento</div><div class="mc-val" id="m-fat">—</div><div class="mc-sub">receita no período</div></div>
-        <div class="mc"><div class="mc-lbl">ROAS</div><div class="mc-val" id="m-roas">—</div><div class="mc-sub">faturamento ÷ investido</div></div>
-        <div class="mc"><div class="mc-lbl">Ticket médio</div><div class="mc-val" id="m-tick">—</div><div class="mc-sub">faturamento ÷ vendas</div></div>
-        <div class="mc" id="m-cpl-card"><div class="mc-lbl">CPL</div><div class="mc-val" id="m-cpl">—</div><div class="mc-sub" id="m-cpl-sub">investido ÷ leads</div></div>
-        <div class="mc" id="m-cac-card"><div class="mc-lbl">CAC</div><div class="mc-val" id="m-cac">—</div><div class="mc-sub" id="m-cac-sub">investido ÷ vendas</div></div>
-      </div>
-    </section>
+    <!-- RESULTADO -->
+    <div class="main">
+      <section class="section" id="sec-funil">
+        <div class="s-head"><div class="s-title">Funil da campanha</div><div class="s-sub" id="funil-sub">taxas em relação à etapa anterior</div></div>
+        <div id="warns-result"></div>
+        <div id="headline"></div>
+        <div id="funnel" role="img" aria-label="Funil da campanha"></div>
+        <div class="legend">
+          <span><i style="background:var(--ok-fg)"></i>Ótimo</span>
+          <span><i style="background:var(--warn-fg)"></i>Na meta</span>
+          <span><i style="background:var(--bad-fg)"></i>Abaixo da meta</span>
+        </div>
+        <div class="divider"></div>
+        <div class="mg-label">Indicadores-chave</div>
+        <div class="mg">
+          <div class="mc" id="m-ctr-card"><div class="mc-lbl">CTR</div><div class="mc-val" id="m-ctr">—</div><div class="mc-sub" id="m-ctr-sub">cliques ÷ impressões</div></div>
+          <div class="mc"><div class="mc-lbl">CPC médio</div><div class="mc-val" id="m-cpc">—</div><div class="mc-sub">custo por clique</div></div>
+          <div class="mc" id="m-cpl-card"><div class="mc-lbl">Custo por lead</div><div class="mc-val" id="m-cpl">—</div><div class="mc-sub" id="m-cpl-sub">investido ÷ leads</div></div>
+          <div class="mc" id="m-cac-card"><div class="mc-lbl">CAC</div><div class="mc-val" id="m-cac">—</div><div class="mc-sub" id="m-cac-sub">custo de aquisição</div></div>
+          <div class="mc"><div class="mc-lbl">CAC teto</div><div class="mc-val" id="m-cact">—</div><div class="mc-sub">valor definido</div></div>
+          <div class="mc hi"><div class="mc-lbl">Faturamento</div><div class="mc-val" id="m-fat">—</div><div class="mc-sub" id="m-fat-sub">receita no período</div></div>
+        </div>
+      </section>
 
-    <!-- RECOMENDAÇÕES -->
-    <section class="section hidden" id="sec-recs">
-      <div class="s-head"><div class="s-title">Recomendações</div><div class="s-sub">ordenadas pelo impacto em vendas</div></div>
-      <div id="recs"></div>
-    </section>
-
+      <section class="section" id="sec-recs">
+        <div class="s-head"><div class="s-title">Recomendações</div><div class="s-sub">ordenadas pelo impacto em vendas</div></div>
+        <div id="recs"></div>
+      </section>
+    </div>
   </div>
 </div>
 
 <script>
 /* ---------- Formatação ---------- */
+const $=id=>document.getElementById(id);
 const nf=new Intl.NumberFormat("pt-BR");
 function parseNum(s){return parseFloat(String(s).replace(/\./g,"").replace(",","."))||0;}
-function v(id){return parseNum(document.getElementById(id).value);}
+function v(id){return parseNum($(id).value);}
 function fmtN(n){return nf.format(Math.round(n));}
 function fmtR(n){return "R$ "+fmtN(n);}
 function fmtRc(n){return n<100?"R$ "+n.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2}):fmtR(n);}
 function fmtRk(n){return n>=1000?"R$ "+(n/1000).toLocaleString("pt-BR",{maximumFractionDigits:1})+" mil":fmtR(n);}
 function fmtP(n){return (n*100).toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1})+"%";}
-function set(id,val){document.getElementById(id).textContent=val;}
+function set(id,val){$(id).textContent=val;}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 
-/* Separador de milhar enquanto digita */
-document.querySelectorAll(".icard input").forEach(inp=>{
+/* Separador de milhar enquanto digita + cálculo ao vivo */
+document.querySelectorAll(".field input").forEach(inp=>{
   inp.value=fmtN(parseNum(inp.value));
   inp.addEventListener("input",()=>{
     const pos=inp.value.length-inp.selectionStart;
@@ -233,37 +223,33 @@ document.querySelectorAll(".icard input").forEach(inp=>{
   });
 });
 
-/* Temperatura do lead: frio (azul) → quente (vermelho) · [fundo, texto] */
-const FCOLORS=[["#2E5A9E","#fff"],["#3F7FC0","#fff"],["#5AA6C8","#0C2A3A"],["#F2B84B","#3D2600"],["#E8792F","#fff"],["#D23C2A","#fff"]];
-
-function logScale(vals){const lv=vals.map(x=>x>0?Math.log(x+1):0);const mx=Math.max(...lv)||1;return lv.map(l=>l>0?28+(l/mx)*72:28);}
-
 /* ---------- Cálculo ---------- */
+let last=null;
 function calc(){
   const imp=v("s-imp"),cli=v("s-cli"),vis=v("s-vis"),lea=v("s-lea"),ops=v("s-ops"),ven=v("s-ven");
   const verba=v("s-verba"),fat=v("s-fat"),cact=v("s-cact"),cplt=v("s-cplt");
 
-  const cpc=cli>0?verba/cli:0,cpv=vis>0?verba/vis:0,cpl=lea>0?verba/lea:0,cpo=ops>0?verba/ops:0,cac=ven>0?verba/ven:0;
+  const cpc=cli>0?verba/cli:0,cpl=lea>0?verba/lea:0,cac=ven>0?verba/ven:0;
   const tick=ven>0?fat/ven:0,roas=verba>0?fat/verba:0;
   const cacOk=cac>0&&cact>0&&cac<=cact, cacBad=cac>0&&cact>0&&cac>cact;
   const cplOk=cpl>0&&cplt>0&&cpl<=cplt, cplBad=cpl>0&&cplt>0&&cpl>cplt;
 
   const stages=[
     {id:"s-imp",label:"Impressões",val:imp},
-    {id:"s-cli",label:"Cliques",val:cli,costLabel:"CPC",cost:cpc},
-    {id:"s-vis",label:"Visitas",val:vis,costLabel:"Custo/visita",cost:cpv},
-    {id:"s-lea",label:"Leads / MQL",val:lea,costLabel:"CPL",cost:cpl,teto:cplt,ok:cplOk,bad:cplBad},
-    {id:"s-ops",label:"Oportunidades / SQL",val:ops,costLabel:"Custo/oport.",cost:cpo},
-    {id:"s-ven",label:"Vendas",val:ven,costLabel:"CAC",cost:cac,teto:cact,ok:cacOk,bad:cacBad}
+    {id:"s-cli",label:"Cliques",val:cli},
+    {id:"s-vis",label:"Visitas",val:vis},
+    {id:"s-lea",label:"Leads / MQL",val:lea},
+    {id:"s-ops",label:"Oportunidades",val:ops},
+    {id:"s-ven",label:"Vendas",val:ven}
   ];
 
   /* lv[0] = mínimo aceitável (meta) · lv[1] = ótimo */
   const rates=[
     {nome:"CTR",lv:[.05,.10],acao:"Testar novos títulos e criativos e revisar a segmentação do público."},
-    {nome:"Tx. de visitas",lv:[.70,.85],acao:"Checar a velocidade da página e se a tag de visita está disparando corretamente."},
-    {nome:"Tx. conv. site",lv:[.10,.15],acao:"Revisar a oferta, a promessa do topo da página e o botão de contato (formulário/WhatsApp)."},
-    {nome:"Tx. qualificação",lv:[.30,.50],acao:"Ajustar a segmentação e incluir perguntas de pré-qualificação no formulário ou no atendimento."},
-    {nome:"Tx. fechamento",lv:[.20,.30],acao:"Revisar tempo de resposta, roteiro de atendimento e follow-up do comercial."}
+    {nome:"Taxa de visitas",lv:[.70,.85],acao:"Checar a velocidade da página e se a tag de visita está disparando corretamente."},
+    {nome:"Conversão do site",lv:[.10,.15],acao:"Revisar a oferta, a promessa do topo da página e o botão de contato (formulário/WhatsApp)."},
+    {nome:"Qualificação",lv:[.30,.50],acao:"Ajustar a segmentação e incluir perguntas de pré-qualificação no formulário ou no atendimento."},
+    {nome:"Fechamento",lv:[.20,.30],acao:"Revisar tempo de resposta, roteiro de atendimento e follow-up do comercial."}
   ];
   rates.forEach((r,i)=>{
     const a=stages[i].val,b=stages[i+1].val;
@@ -273,115 +259,165 @@ function calc(){
     r.score=r.rate?r.rate/r.lv[0]:Infinity;
   });
 
-  /* Gargalo = etapa mais distante da meta, entre as que não estão no ótimo */
+  /* Gargalo = taxa abaixo do mínimo mais distante da meta */
   let g=-1;
-  rates.forEach((r,i)=>{if(r.status==="ruim"){if(g<0||r.score<rates[g].score)g=i;}});
+  rates.forEach((r,i)=>{if(r.status==="ruim"&&(g<0||r.score<rates[g].score))g=i;});
 
   /* Validação */
   const warns=[];
-  document.querySelectorAll(".icard").forEach(c=>c.classList.remove("err"));
+  document.querySelectorAll(".field").forEach(c=>c.classList.remove("err"));
   for(let i=1;i<stages.length;i++){
     if(stages[i].val>stages[i-1].val&&stages[i-1].val>0){
       warns.push(`${stages[i].label} (${fmtN(stages[i].val)}) está maior que ${stages[i-1].label} (${fmtN(stages[i-1].val)}). Confira os dados.`);
-      document.querySelector(`.icard[data-id="${stages[i].id}"]`).classList.add("err");
+      document.querySelector(`.field[data-id="${stages[i].id}"]`).classList.add("err");
     }
   }
-  const wh=warns.length?`<div class="warns">⚠ ${warns.join("<br>⚠ ")}</div>`:"";
-  document.getElementById("warns").innerHTML=wh;
-  document.getElementById("warns-result").innerHTML=wh?`<div class="warns-result">${wh}</div>`:"";
+  $("warns-result").innerHTML=warns.length?`<div class="warns">⚠ ${warns.join("<br>⚠ ")}</div>`:"";
 
   const f={cpc,ven,lea,verba,tick,cac,cact,cacOk,cacBad,cpl,cplt,cplOk,cplBad};
   renderHeadline(rates,g,f);
-  renderFunnel(stages,rates,g,f);
+  last={stages,rates,g};
+  renderFunnel();
   renderRecs(rates,f);
 
-  /* Resultado financeiro */
-  set("m-fat",fat>0?fmtR(fat):"—");
-  set("m-roas",roas>0?roas.toLocaleString("pt-BR",{maximumFractionDigits:2})+"x":"—");
-  set("m-tick",tick>0?fmtR(tick):"—");
-  const cc=document.getElementById("m-cac-card");
-  set("m-cac",cac>0?fmtRc(cac):"—");
-  cc.className="mc"+(cacOk?" ok":cacBad?" bad":"");
-  const pc=document.getElementById("m-cpl-card");
+  /* Indicadores-chave */
+  const ctr=imp>0&&cli>0?cli/imp:0;
+  set("m-ctr",ctr>0?fmtP(ctr):"—");
+  $("m-ctr-card").className="mc"+(ctr>0?(ctr>=rates[0].lv[1]?" ok":ctr>=rates[0].lv[0]?" warn":" bad"):"");
+  set("m-ctr-sub",ctr>0?(ctr>=rates[0].lv[1]?"ótimo":ctr>=rates[0].lv[0]?"na meta":"abaixo da meta"):"cliques ÷ impressões");
+  set("m-cpc",cpc>0?fmtRc(cpc):"—");
   set("m-cpl",cpl>0?fmtRc(cpl):"—");
-  pc.className="mc"+(cplOk?" ok":cplBad?" bad":"");
+  $("m-cpl-card").className="mc"+(cplOk?" ok":cplBad?" bad":"");
   set("m-cpl-sub",cplt>0?`teto ${fmtRc(cplt)} ${cplOk?"✓":cplBad?"▲":""}`:"investido ÷ leads");
-  set("m-cac-sub",cact>0?`teto ${fmtR(cact)} ${cacOk?"✓":cacBad?"▲":""}`:"investido ÷ vendas");
+  set("m-cac",cac>0?fmtRc(cac):"—");
+  $("m-cac-card").className="mc"+(cacOk?" ok":cacBad?" bad":"");
+  set("m-cac-sub",cacOk?"dentro do teto ✓":cacBad?"acima do teto ▲":"custo de aquisição");
+  set("m-cact",cact>0?fmtR(cact):"—");
+  set("m-fat",fat>0?fmtR(fat):"—");
+  set("m-fat-sub",ven>0?`${fmtN(ven)} venda${ven>1?"s":""} · ROAS ${roas.toLocaleString("pt-BR",{maximumFractionDigits:2})}x`:"receita no período");
 }
 
-/* ---------- Frase-resumo no topo do funil ---------- */
+/* ---------- Frase-resumo ---------- */
 function renderHeadline(rates,g,f){
-  const ruins=rates.filter(r=>r.status==="ruim").length;
-  const otimos=rates.filter(r=>r.status==="otimo").length+(f.cplOk?1:0)+(f.cacOk?1:0);
   const tetos=[f.cplBad?"CPL":null,f.cacBad?"CAC":null].filter(Boolean);
   let cls,status,main;
-  if(g>=0){
+  if(rates.every(r=>r.status==="vazio")){
+    cls="w";status="Sem dados";main="Preencha os números da campanha na lateral.";
+  }else if(g>=0){
     const r=rates[g];
-    cls=r.status==="ruim"?"d":"w";
-    status=r.status==="ruim"?"Precisa de ajuste":"Atenção";
-    main=r.status==="ruim"
-      ?`O maior vazamento está entre <b>${r.from}</b> e <b>${r.to}</b>: ${r.nome.toLowerCase()} de <b>${fmtP(r.rate)}</b>, abaixo do mínimo de ${fmtP(r.lv[0])}.`
-      :`Todas as etapas estão na meta. Mais espaço para melhorar: <b>${r.from} → ${r.to}</b> (${fmtP(r.rate)}, ótimo a partir de ${fmtP(r.lv[1])}).`;
+    cls="d";status="Precisa de ajuste";
+    main=`O maior vazamento está entre <b>${r.from}</b> e <b>${r.to}</b>: ${r.nome.toLowerCase()} de <b>${fmtP(r.rate)}</b>, abaixo do mínimo de ${fmtP(r.lv[0])}.`;
   }else if(tetos.length){
     cls="w";status="Atenção";
     main=`Todas as etapas estão acima do mínimo esperado, mas o <b>${tetos.join(" e o ")}</b> ${tetos.length>1?"passaram":"passou"} do teto definido.`;
-  }else if(rates.every(r=>r.status==="vazio")){
-    cls="w";status="Sem dados";main="Clique em <b>Editar dados</b> e preencha os números da campanha.";
   }else{
     cls="s";status="Saudável";main="Todas as etapas estão acima do mínimo esperado e CPL e CAC estão dentro do teto.";
   }
-  document.getElementById("headline").innerHTML=`<div class="headline ${cls}"><span class="h-status">${status}</span><div class="h-main">${main}</div></div>`;
+  $("headline").innerHTML=`<div class="headline ${cls}"><span class="h-status">${status}</span><div class="h-main">${main}</div></div>`;
 }
 
-/* ---------- Funil ---------- */
-function renderFunnel(stages,rates,g,f){
-  const w=logScale(stages.map(s=>s.val));
-  let h="";
-  stages.forEach((s,i)=>{
-    let cost="";
-    if(s.costLabel){
-      const cls=s.bad?" bad":s.ok?" ok":"";
-      const tip=s.teto>0?` title="Teto: ${fmtRc(s.teto)}"`:"";
-      const mark=s.bad?" ▲":s.ok?" ✓":"";
-      cost=`<span class="fcost${cls}"${tip}>${s.costLabel} <b>${s.cost>0?fmtRc(s.cost):"—"}${mark}</b></span>`;
-    }
-    const [bg,fg]=FCOLORS[i];
-    h+=`<div class="frow"><span class="fname">${s.label}</span>
-        <div class="fbar-outer"><div class="fbar-inner" style="width:${w[i].toFixed(1)}%;background:${bg}"><span class="fbar-txt" style="color:${fg}">${s.val>0?fmtN(s.val):"—"}</span></div></div>
-        ${cost||"<span></span>"}</div>`;
-    if(i<rates.length){
-      const r=rates[i],isG=i===g;
-      const tip=`Meta ${fmtP(r.lv[0])} · ótimo ${fmtP(r.lv[1])}`;
-      h+=`<div class="connector${isG?" gargalo"+(r.status==="bom"?" soft":""):""}"><span class="spacer"></span>
-            <div class="conn-mid" title="${tip}">
-              ${isG?'<span class="gtag">Gargalo</span>':""}
-              <span class="bpill ${r.status}">${r.nome} ${r.rate?fmtP(r.rate):"—"}</span>
-            </div><span class="spacer"></span>
-          </div>`;
-    }
+/* ---------- Funil (silhueta contínua com bico) ----------
+   Forma fixa: o volume está no número, não na largura.
+   As etapas formam uma silhueta única que termina num bico (Vendas).
+   Cada taxa sai da junção entre etapas por uma linha-guia até a coluna da direita.
+   Status só na taxa; no gargalo a junção e a linha ficam vermelhas. */
+const STAGE_FILL=["#CDEFE0","#8FD8BC","#4BAA83","#23805F","#175C48","#0C3228"];
+const STAGE_TEXT=["#0C3228","#0C3228","#fff","#fff","#fff","#fff"];
+const STATUS_COLOR={otimo:"#0B5A45",bom:"#8A520A",ruim:"#A32D2D",vazio:"#8a8a8a"};
+const GUIDE="#C9D2CD";
+
+function rateNote(r){
+  const min=fmtP(r.lv[0]),opt=fmtP(r.lv[1]);
+  return r.status==="ruim"?`abaixo da meta (${min})`
+    :r.status==="bom"?`na meta · ótimo ≥ ${opt}`
+    :r.status==="otimo"?`ótimo (≥ ${opt})`
+    :`meta ${min}`;
+}
+function polyPath(pts,rad){
+  const c=pts.map((p,i)=>{
+    const pv=pts[(i+pts.length-1)%pts.length],nx=pts[(i+1)%pts.length];
+    const b=Math.hypot(pv[0]-p[0],pv[1]-p[1]),a=Math.hypot(nx[0]-p[0],nx[1]-p[1]);
+    const r=Math.min(rad[i],b/2,a/2);
+    return{p,en:[p[0]+(pv[0]-p[0])*r/b,p[1]+(pv[1]-p[1])*r/b],ex:[p[0]+(nx[0]-p[0])*r/a,p[1]+(nx[1]-p[1])*r/a]};
   });
-  document.getElementById("funnel").innerHTML=h;
+  const xy=q=>q.map(n=>n.toFixed(2)).join(" ");
+  return c.map((k,i)=>`${i?"L":"M"} ${xy(k.en)} Q ${xy(k.p)} ${xy(k.ex)}`).join(" ")+" Z";
+}
+
+function renderFunnel(){
+  if(!last)return;
+  const {stages,rates,g}=last;
+  const box=$("funnel");
+  const W=Math.max(280,Math.round(box.clientWidth||700));
+  const compact=W<520;
+  const stageW=W*(compact?.52:.56);
+  const cx=stageW/2;
+  const SH=compact?60:66, GAP=4, TOP=2;
+  const n=stages.length;
+  const H=TOP*2+n*SH+(n-1)*GAP;
+  const minW=compact?.42:.30;
+  const bw=k=>stageW*(1-k*(1-minW)/(n-1));
+  const rateX=stageW+(compact?18:30);
+  const rateW=W-rateX-4;
+  const parts=[],summary=[];
+
+  stages.forEach((s,i)=>{
+    const y=TOP+i*(SH+GAP);
+    const isStem=i===n-1;
+    const tw=isStem?bw(n-1):bw(i), bwid=isStem?bw(n-1):bw(i+1);
+    const pts=[[cx-tw/2,y],[cx+tw/2,y],[cx+bwid/2,y+SH],[cx-bwid/2,y+SH]];
+    const rad=i===0?[10,10,3,3]:isStem?[3,3,10,10]:[3,3,3,3];
+    const count=s.val>0?fmtN(s.val):"—";
+    const avail=Math.min(tw,bwid)-14;
+    const lblSize=Math.min(compact?10:11,avail/(s.label.length*.66));
+    const valSize=Math.min(compact?19:23,avail/(count.length*.62));
+    parts.push(`<g>
+      <path d="${polyPath(pts,rad)}" fill="${STAGE_FILL[i]}"/>
+      <text x="${cx}" y="${(y+SH*.38).toFixed(1)}" text-anchor="middle" font-size="${lblSize.toFixed(1)}" font-weight="600" letter-spacing=".06em" fill="${STAGE_TEXT[i]}" fill-opacity=".75">${esc(s.label.toUpperCase())}</text>
+      <text x="${cx}" y="${(y+SH*.38+valSize+2).toFixed(1)}" text-anchor="middle" font-size="${valSize.toFixed(1)}" font-weight="600" fill="${STAGE_TEXT[i]}">${count}</text>
+    </g>`);
+    summary.push(`${s.label}: ${count}`);
+    if(i>=rates.length)return;
+
+    const r=rates[i],isG=i===g;
+    const jy=y+SH+GAP/2;
+    const jx=cx+bw(i+1)/2;
+    const col=isG?STATUS_COLOR.ruim:GUIDE;
+    const valTxt=r.rate?fmtP(r.rate):"—";
+    const note=rateNote(r);
+    const nameSize=Math.min(compact?11:12,rateW/((r.nome.length+(isG?10:0))*.58));
+    const valSize2=Math.min(compact?18:21,rateW/(valTxt.length*.6));
+    const noteSize=Math.min(compact?10:11,rateW/(note.length*.53));
+    if(isG)parts.push(`<line x1="${(cx-bw(i+1)/2+4).toFixed(1)}" y1="${jy}" x2="${(jx-4).toFixed(1)}" y2="${jy}" stroke="${STATUS_COLOR.ruim}" stroke-width="3" stroke-linecap="round"/>`);
+    parts.push(`<g>
+      <title>${esc(r.to)} ÷ ${esc(r.from)} · meta ${fmtP(r.lv[0])} · ótimo ${fmtP(r.lv[1])}</title>
+      <line x1="${(jx+6).toFixed(1)}" y1="${jy}" x2="${(rateX-10).toFixed(1)}" y2="${jy}" stroke="${col}" stroke-width="1.5" stroke-dasharray="${isG?"0":"3 4"}"/>
+      <circle cx="${(rateX-8).toFixed(1)}" cy="${jy}" r="${isG?4:3}" fill="${STATUS_COLOR[r.status]}"/>
+      <text x="${rateX}" y="${(jy-valSize2*.55).toFixed(1)}" font-size="${nameSize.toFixed(1)}" font-weight="500" fill="#6b6b6b">${esc(r.nome)}${isG?`<tspan dx="6" font-size="${Math.max(8,nameSize-2).toFixed(1)}" font-weight="700" letter-spacing="1" fill="${STATUS_COLOR.ruim}">GARGALO</tspan>`:""}</text>
+      <text x="${rateX}" y="${(jy+valSize2*.42).toFixed(1)}" font-size="${valSize2.toFixed(1)}" font-weight="600" fill="${STATUS_COLOR[r.status]}">${valTxt}</text>
+      <text x="${rateX}" y="${(jy+valSize2*.42+noteSize+4).toFixed(1)}" font-size="${noteSize.toFixed(1)}" fill="${r.status==="ruim"?STATUS_COLOR.ruim:"#6b6b6b"}">${esc(note)}</text>
+    </g>`);
+    summary.push(`${r.nome}: ${valTxt}, ${note}${isG?", gargalo":""}`);
+  });
+
+  box.setAttribute("aria-label","Funil da campanha. "+summary.join(". ")+".");
+  box.innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" font-family="Outfit, system-ui, sans-serif" aria-hidden="true" focusable="false" style="overflow:visible">${parts.join("")}</svg>`;
 }
 
 /* ---------- Recomendações ----------
-   Só causas (taxas abaixo do mínimo). CPL e CAC são consequência:
-   aparecem como efeito de cada correção. Se nenhuma taxa explicar o
-   estouro de teto, a causa é o custo do tráfego (CPC). */
+   Só causas (taxas abaixo do mínimo). CPL e CAC são consequência.
+   Se nenhuma taxa explicar o estouro de teto, a causa é o CPC. */
 function tetoTag(label,val,teto,fmt){
   if(!(teto>0))return `${label} ${fmt(val)}`;
   const ok=val<=teto;
   return `<span style="color:${ok?"var(--ok-fg)":"var(--bad-fg)"}">${label} ${fmt(val)} ${ok?"✓":"▲"}</span>`;
 }
 function renderRecs(rates,f){
-  const recs=rates.map((r,idx)=>({...r,idx})).filter(r=>r.status==="ruim").map(r=>{
-    const target=r.lv[0];
-    return {...r,target,mult:target/r.rate};
-  }).sort((a,b)=>b.mult-a.mult);
-
+  const recs=rates.map((r,idx)=>({...r,idx})).filter(r=>r.status==="ruim")
+    .map(r=>({...r,target:r.lv[0],mult:r.lv[0]/r.rate})).sort((a,b)=>b.mult-a.mult);
   let h="";
   recs.forEach((r,i)=>{
     let imp;
-    /* taxas até a conversão do site (idx 0–2) também mexem no CPL */
     const efeitos=[];
     if(r.idx<=2&&f.cpl>0)efeitos.push(tetoTag("CPL",f.cpl/r.mult,f.cplt,fmtRc));
     if(f.ven>0){
@@ -396,46 +432,37 @@ function renderRecs(rates,f){
       <div><div class="rec-head">${r.nome} <span>de ${fmtP(r.rate)} para ${fmtP(r.target)}</span></div><div class="rec-act">${r.acao}</div></div>
       <div class="rec-imp">${imp}</div></div>`;
   });
-
-  /* Estouro de teto sem taxa ruim que explique: a causa é o CPC */
   if(!recs.length&&(f.cplBad||f.cacBad)&&f.cpc>0){
     const fator=Math.max(f.cplBad?f.cpl/f.cplt:1,f.cacBad?f.cac/f.cact:1);
-    const cpcAlvo=f.cpc/fator;
     h+=`<div class="rec"><div class="rec-n">1</div>
-      <div><div class="rec-head">CPC <span>de ${fmtRc(f.cpc)} para até ${fmtRc(cpcAlvo)}</span></div><div class="rec-act">As taxas do funil estão dentro do esperado, então o que pesa é o custo do tráfego. Revisar lances, palavras negativas, horários e públicos para baratear o clique.</div></div>
+      <div><div class="rec-head">CPC <span>de ${fmtRc(f.cpc)} para até ${fmtRc(f.cpc/fator)}</span></div><div class="rec-act">As taxas do funil estão dentro do esperado, então o que pesa é o custo do tráfego. Revisar lances, palavras negativas, horários e públicos para baratear o clique.</div></div>
       <div class="rec-imp"><div class="rec-imp-main">−${Math.round((1-1/fator)*100)}% no CPC</div><div class="rec-imp-sub">para ${[f.cplBad?"CPL":null,f.cacBad?"CAC":null].filter(Boolean).join(" e ")} voltar${f.cplBad&&f.cacBad?"em":""} ao teto</div></div></div>`;
   }
-
   if(!h){
-    document.getElementById("recs").innerHTML=`<div class="rec-empty">Todas as etapas estão acima do mínimo esperado e CPL e CAC estão dentro do teto. Nenhum ajuste urgente. O próximo passo é testar escala: aumentar a verba aos poucos e acompanhar se as taxas se mantêm.</div>`;
+    $("recs").innerHTML=rates.every(r=>r.status==="vazio")
+      ?`<div class="rec-empty">As recomendações aparecem quando os dados forem preenchidos.</div>`
+      :`<div class="rec-empty">Todas as etapas estão acima do mínimo esperado e CPL e CAC estão dentro do teto. Nenhum ajuste urgente. O próximo passo é testar escala: aumentar a verba aos poucos e acompanhar se as taxas se mantêm.</div>`;
     return;
   }
-  document.getElementById("recs").innerHTML=`<div class="recs">${h}</div><div class="rec-note">Estimativa mantendo o mesmo investimento e as demais taxas.</div>`;
+  $("recs").innerHTML=`<div class="recs">${h}</div><div class="rec-note">Estimativa mantendo o mesmo investimento e as demais taxas.</div>`;
 }
 
-/* ---------- Alternar: formulário ↔ resultado ---------- */
-const $=id=>document.getElementById(id);
-function mostrarResultado(){
-  calc();
+/* ---------- Período e modo apresentação ---------- */
+$("periodo").addEventListener("input",()=>{
   const p=$("periodo").value.trim();
-  $("funil-sub").textContent=p?`período: ${p}`:"do lead frio ao lead quente";
-  $("sec-dados").classList.add("hidden");
-  $("sec-funil").classList.remove("hidden");
-  $("sec-recs").classList.remove("hidden");
-  $("btn-edit").classList.remove("hidden");
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-function mostrarFormulario(){
-  $("sec-dados").classList.remove("hidden");
-  $("sec-funil").classList.add("hidden");
-  $("sec-recs").classList.add("hidden");
-  $("btn-edit").classList.add("hidden");
-  window.scrollTo({top:0,behavior:"smooth"});
-  $("s-imp").focus();
-}
-$("btn-gerar").addEventListener("click",mostrarResultado);
-$("btn-edit").addEventListener("click",mostrarFormulario);
-document.querySelectorAll("#sec-dados input").forEach(i=>i.addEventListener("keydown",e=>{if(e.key==="Enter")mostrarResultado();}));
+  $("funil-sub").textContent=p?`período: ${p}`:"taxas em relação à etapa anterior";
+});
+$("btn-toggle").addEventListener("click",()=>{
+  const on=document.body.classList.toggle("present");
+  $("btn-toggle").textContent=on?"✎ Editar dados":"Modo apresentação";
+  $("btn-toggle").setAttribute("aria-pressed",on);
+});
+
+/* Redesenha o funil quando a largura muda (inclusive ao alternar o modo) */
+if(typeof ResizeObserver==="function"){
+  let w=0;
+  new ResizeObserver(e=>{const nw=Math.round(e[0].contentRect.width);if(nw>0&&nw!==w){w=nw;renderFunnel();}}).observe($("funnel"));
+}else{window.addEventListener("resize",renderFunnel);}
 
 calc();
 </script>
